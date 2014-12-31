@@ -126,52 +126,6 @@ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
 echo -e "\n\n" >&2
 
-: <<'END'
-# Setup user environment variables (Append to bottom) [manual steps]
-# sudo vi ~/.bashrc
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-# Set Hadoop-related environment variables
-export HDUSER_HOME=/home/hduser
-export HADOOP_HOME=/usr/local/hadoop
-
-# Set JAVA_HOME (we will also configure JAVA_HOME directly for Hadoop later on)
-export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
-export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:/jre/bin/java::")
-
-export HADOOP_MAPRED_HOME=$HADOOP_HOME
-export HADOOP_COMMON_HOME=$HADOOP_HOME
-export HADOOP_HDFS_HOME=$HADOOP_HOME
-export YARN_HOME=$HADOOP_HOME
-export HADOOP_CONF_DIR=${HDUSER_HOME}"/mmu-conf"
-
-# Some convenient aliases and functions for running Hadoop-related commands
-unalias fs &> /dev/null
-alias fs="hadoop fs"
-unalias hls &> /dev/null
-alias hls="fs -ls"
-
-alias hfs="hdfs dfs"
-
-# If you have LZO compression enabled in your Hadoop cluster and
-# compress job outputs with LZOP (not covered in this tutorial):
-# Conveniently inspect an LZOP compressed file from the command
-# line; run via:
-#
-# $ lzohead /hdfs/path/to/lzop/compressed/file.lzo
-#
-# Requires installed 'lzop' command.
-#
-lzohead () {
-    hadoop fs -cat $1 | lzop -dc | head -1000 | less
-}
-
-# Add Hadoop bin/ directory to PATH
-export PATH=$PATH:$HADOOP_HOME/bin
-export PATH=$PATH:$HADOOP_HOME/sbin
-
-END
-
 # Check for Hadoop distribution
 echo "============================================================" >&2
 echo "(6) Check for Hadoop Distribution" >&2
