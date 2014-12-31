@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Format the HDFS according to the configuration stored in
+# HDUSER_HOME/mmu-conf.
+echo "============================================================" >&2
+echo "(1) Stop Hadoop Processes" >&2
+echo "============================================================" >&2
+echo "exec: ./stop-hadoop" >&2
+echo "------------------------------------------------------------" >&2
+./stop-hadoop
+
+echo -e "\n\n" >&2
+
+echo "============================================================" >&2
+echo "(2) Clear tmp folder" >&2
+echo "============================================================" >&2
+echo "exec: sudo rm -rf /app/hadoop/tmp/*" >&2
+echo "------------------------------------------------------------" >&2
+sudo rm -rf /app/hadoop/tmp/*
+
+echo -e "\n\n" >&2
+
+echo "============================================================" >&2
+echo "(3) Format namenode" >&2
+echo "============================================================" >&2
+echo "exec: export HDUSER_HOME=/home/hduser" >&2
+echo "exec: export HADOOP_CONF_DIR=$HDUSER_HOME/mmu-conf" >&2
+#echo "exec: $HADOOP_HOME/sbin/hadoop --config $HADOOP_CONF_DIR namenode -format" >&2
+echo "exec: $HADOOP_HOME/bin/hdfs namenode -format" >&2
+echo "------------------------------------------------------------" >&2
+export HDUSER_HOME=/home/hduser
+export HADOOP_CONF_DIR=$HDUSER_HOME/mmu-conf
+#$HADOOP_HOME/bin/hadoop --config $HADOOP_CONF_DIR namenode -format
+$HADOOP_HOME/bin/hdfs namenode -format
