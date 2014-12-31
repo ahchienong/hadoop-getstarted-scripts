@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Stops Hadoop HDFS and Map/Reduce daemons according to the configuration
+# stored in HDUSER_HOME/mmu-conf
+
+echo "============================================================" >&2
+echo "Stopping Hadoop..." >&2
+echo "============================================================" >&2
+echo "exec: export HADOOP_HOME=/usr/local/hadoop" >&2
+echo "exec: export HDUSER_HOME=/home/hduser" >&2
+echo "exec: export HADOOP_CONF_DIR=$HDUSER_HOME/mmu-conf" >&2
+#echo "exec: ${HADOOP_HOME}"/sbin/stop-all.sh" --config $HADOOP_CONF_DIR" >&2
+echo "exec: ${HADOOP_HOME}"/sbin/stop-dfs.sh" --config $HADOOP_CONF_DIR" >&2
+echo "exec: ${HADOOP_HOME}"/sbin/stop-yarn.sh" --config $HADOOP_CONF_DIR" >&2
+echo "------------------------------------------------------------" >&2
+export HADOOP_HOME=/usr/local/hadoop
+export HDUSER_HOME=/home/hduser
+export HADOOP_CONF_DIR=$HDUSER_HOME/mmu-conf
+#${HADOOP_HOME}"/sbin/stop-all.sh" --config $HADOOP_CONF_DIR
+${HADOOP_HOME}"/sbin/stop-dfs.sh" --config $HADOOP_CONF_DIR
+${HADOOP_HOME}"/sbin/stop-yarn.sh" --config $HADOOP_CONF_DIR
+

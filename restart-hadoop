@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# restart hadoop utilities If you want to change hadoop-site.xml 
+# make changes to "HDUSER_HOME/mmu-conf/template/hadoop-site.xml" 
+
+echo "============================================================" >&2
+echo "(1) restart hadoop utilities If you want to change hadoop-site.xml" >&2
+echo "make changes to 'HDUSER_HOME/mmu-conf/template/hadoop-site.xml'" >&2
+echo "============================================================" >&2
+echo "exec: ~/start-hadoop" >&2
+echo "------------------------------------------------------------" >&2
+~/start-hadoop
+
+echo "------------------------------------------------------------" >&2
+echo "exec: ~/stop-hadoop" >&2
+echo "------------------------------------------------------------" >&2
+~/stop-hadoop
