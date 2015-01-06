@@ -22,57 +22,6 @@ fi
 HOSTNAME="$1"
 NODETYPE="$2"
 
-# get a list of ethernet network interfaces that are up
-echo "============================================================" >&2
-echo "(1.1) get a list of ethernet network interfaces that are up" >&2
-echo "============================================================" >&2
-echo "exec: eth_ifs=$(/bin/netstat -i | /bin/grep eth | /usr/bin/awk '{print $1}')" >&2
-echo "exec: nifs=$(echo $eth_ifs | wc -w)" >&2
-echo "exec: [ $nifs -ge 1 ] || exit 0;" >&2
-echo "------------------------------------------------------------" >&2
-sh -c "eth_ifs=$(/bin/netstat -i | /bin/grep eth | /usr/bin/awk '{print $1}')"
-sh -c "nifs=$(echo $eth_ifs | wc -w)"
-sh -c "[ $nifs -ge 1 ] || exit 0;"
-
-echo -e "\n" >&2
-
-# Select the first interface 
-echo "============================================================" >&2
-echo "(1.2) Select the first interface " >&2
-echo "============================================================" >&2
-echo "exec: eth1=$(echo \"$eth_ifs\" | /usr/bin/head -n 1)" >&2
-echo "------------------------------------------------------------" >&2
-sh -c "eth1=$(echo \"$eth_ifs\" | /usr/bin/head -n 1)"
-
-echo -e "\n" >&2
-
-# Get the IP address
-echo "============================================================" >&2
-echo "(1.3) Get the IP address" >&2
-echo "============================================================" >&2
-echo "exec: eth_ip=$(/sbin/ifconfig $eth1 | /bin/grep \"inet addr:\" | /usr/bin/awk '{print $2}' | /bin/sed \"s/addr://\")" >&2
-echo "------------------------------------------------------------" >&2
-sh -c "eth_ip=$(/sbin/ifconfig $eth1 | /bin/grep \"inet addr:\" | /usr/bin/awk '{print $2}' | /bin/sed \"s/addr://\")"
-
-echo -e "\n" >&2
-
-echo "============================================================" >&2
-echo "(1.4) Replacing hosts & hostname file" >&2
-echo "============================================================" >&2
-echo "exec: sudo sh -c \"sed 's/host_ip/$eth_ip/g ; s/host_name/${HOSTNAME}/g' < /home/hduser/mmu-conf/networks/hosts > /etc/hosts\"" >&2
-echo "exec: sudo sh -c \"sed 's/host_name/${HOSTNAME}/g' < /home/hduser/mmu-conf/networks/hostname > /etc/hostname\"" >&2
-echo "------------------------------------------------------------" >&2
-if [ HOSTNAME != "" ]; then
-	sudo sh -c "sed 's/host_ip/$eth_ip/g ; s/host_name/${HOSTNAME}/g' < /home/hduser/mmu-conf/networks/hosts > /etc/hosts"
-	#sed "s/host_ip/$eth_ip/g ; s/host_name/${HOSTNAME}/g" < /etc/hosts > $HDUSER_HOME/mmu-conf/networks/hosts
-	sudo sh -c "sed 's/host_name/${HOSTNAME}/g' < /home/hduser/mmu-conf/networks/hostname > /etc/hostname"
-	#sed "s/host_name/${HOSTNAME}/g" < /etc/hostname > $HDUSER_HOME/mmu-conf/networks/hostname
-fi
-
-
-echo -e "\n\n" >&2
-
-
 # Get Utilities required
 echo "============================================================" >&2
 echo "(2) Install Utilities required" >&2
@@ -204,7 +153,14 @@ echo "exec: mkdir -pv /usr/local/hadoop/data/datanode" >&2
 echo "------------------------------------------------------------" >&2
 # DATANODE (ALL Machines)
 mkdir -pv /usr/local/hadoop/data/datanode
-echo "----------------------------DONE----------------------------" >&2
+
+echo -e "\n\n" >&2
+
+echo "exec: ~/updatehost.sh ${HOSTNAME}" >&2
+sh -c "~/updatehost.sh ${HOSTNAME}"
+
+echo "============================DONE============================" >&2
+
 
 
 
