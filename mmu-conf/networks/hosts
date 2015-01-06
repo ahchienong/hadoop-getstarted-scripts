@@ -1,6 +1,6 @@
 127.0.0.1       localhost
 
-host_ip			host_name
+host_ip		host_name
 
 
 # The following lines are desirable for IPv6 capable hosts
